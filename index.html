@@ -6,45 +6,45 @@
     <title>To-Do App</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Custom styles for a polished look */
+        
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f4f6f8;
         }
         h1 {
-            color: #374151; /* Gray-800 from Tailwind */
+            color: #374151; 
             text-align: center;
             margin-bottom: 2.5rem;
         }
         .max-w-xl {
             background-color: #fff;
-            border-radius: 0.5rem; /* Rounded from Tailwind */
-            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.05); /* Shadow from Tailwind */
+            border-radius: 0.5rem; 
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.05); 
             padding: 2rem;
         }
         #taskForm {
             margin-bottom: 2rem;
         }
         #taskInput, #taskDate {
-            border-color: #d1d5db; /* Gray-300 from Tailwind */
+            border-color: #d1d5db; 
             transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
         }
         #taskInput:focus, #taskDate:focus {
             outline: 0;
-            border-color: #63b3ed; /* Blue-400 from Tailwind */
-            box-shadow: 0 0 0 0.2rem rgba(99, 179, 237, 0.25); /* Blue-200 from Tailwind with opacity */
+            border-color: #63b3ed; 
+            box-shadow: 0 0 0 0.2rem rgba(99, 179, 237, 0.25); 
         }
         #taskForm button {
             font-weight: 500;
             transition: background-color 0.2s ease-in-out;
         }
         #taskList li {
-            border-radius: 0.25rem; /* Rounded from Tailwind */
-            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* Subtle shadow */
+            border-radius: 0.25rem; 
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); 
             transition: box-shadow 0.2s ease-in-out;
         }
         #taskList li:hover {
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* Deeper shadow on hover */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); 
         }
         #taskList li span.line-through {
             text-decoration: line-through;
@@ -59,17 +59,17 @@
             opacity: 0.8;
         }
         #taskList li .text-green-600 {
-            background-color: #e6f7ed; /* Light green background */
+            background-color: #e6f7ed; 
             color: #1a7e3a;
             border: 1px solid #b3e5be;
         }
         #taskList li .text-blue-600 {
-            background-color: #e8f0fe; /* Light blue background */
+            background-color: #e8f0fe; 
             color: #2c5282;
             border: 1px solid #a3b18a;
         }
         #taskList li .text-red-600 {
-            background-color: #ffebee; /* Light red background */
+            background-color: #ffebee; 
             color: #c62828;
             border: 1px solid #ef9a9a;
         }
