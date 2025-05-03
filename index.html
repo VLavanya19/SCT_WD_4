@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>To-Do App</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles for a polished look */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f8;
+        }
+        h1 {
+            color: #374151; /* Gray-800 from Tailwind */
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+        .max-w-xl {
+            background-color: #fff;
+            border-radius: 0.5rem; /* Rounded from Tailwind */
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.05); /* Shadow from Tailwind */
+            padding: 2rem;
+        }
+        #taskForm {
+            margin-bottom: 2rem;
+        }
+        #taskInput, #taskDate {
+            border-color: #d1d5db; /* Gray-300 from Tailwind */
+            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        }
+        #taskInput:focus, #taskDate:focus {
+            outline: 0;
+            border-color: #63b3ed; /* Blue-400 from Tailwind */
+            box-shadow: 0 0 0 0.2rem rgba(99, 179, 237, 0.25); /* Blue-200 from Tailwind with opacity */
+        }
+        #taskForm button {
+            font-weight: 500;
+            transition: background-color 0.2s ease-in-out;
+        }
+        #taskList li {
+            border-radius: 0.25rem; /* Rounded from Tailwind */
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* Subtle shadow */
+            transition: box-shadow 0.2s ease-in-out;
+        }
+        #taskList li:hover {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* Deeper shadow on hover */
+        }
+        #taskList li span.line-through {
+            text-decoration: line-through;
+        }
+        #taskList li button {
+            padding: 0.5rem;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            transition: opacity 0.15s ease-in-out;
+        }
+        #taskList li button:hover {
+            opacity: 0.8;
+        }
+        #taskList li .text-green-600 {
+            background-color: #e6f7ed; /* Light green background */
+            color: #1a7e3a;
+            border: 1px solid #b3e5be;
+        }
+        #taskList li .text-blue-600 {
+            background-color: #e8f0fe; /* Light blue background */
+            color: #2c5282;
+            border: 1px solid #a3b18a;
+        }
+        #taskList li .text-red-600 {
+            background-color: #ffebee; /* Light red background */
+            color: #c62828;
+            border: 1px solid #ef9a9a;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen p-6 flex flex-col items-center">
+
+    <h1 class="text-3xl font-bold text-gray-800 mb-6">📝 To-Do App</h1>
+
+    <div class="w-full max-w-xl">
+        <form id="taskForm" class="flex flex-col md:flex-row gap-3 mb-6">
+            <input id="taskInput" type="text" placeholder="Enter a task..." class="flex-1 px-4 py-2 rounded border border-gray-300 focus:ring focus:ring-blue-200 focus:border-blue-400" required />
+            <input id="taskDate" type="datetime-local" class="px-4 py-2 rounded border border-gray-300 focus:ring focus:ring-blue-200 focus:border-blue-400" />
+            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400">Add Task</button>
+        </form>
+
+        <ul id="taskList" class="space-y-3"></ul>
+    </div>
+
+    <script>
+        const taskForm = document.getElementById("taskForm");
+        const taskInput = document.getElementById("taskInput");
+        const taskDate = document.getElementById("taskDate");
+        const taskList = document.getElementById("taskList");
+
+        let tasks = [];
+
+        function renderTasks() {
+            taskList.innerHTML = "";
+            tasks.forEach((task, index) => {
+                const li = document.createElement("li");
+                li.className = "bg-white p-4 rounded shadow flex justify-between items-start";
+
+                const left = document.createElement("div");
+                left.className = "flex flex-col";
+
+                const taskText = document.createElement("span");
+                taskText.textContent = task.text;
+                taskText.className = task.completed ? "line-through text-gray-400" : "text-lg font-medium text-gray-800";
+
+                const dateText = document.createElement("span");
+                if (task.date) {
+                    dateText.textContent = `📅 ${new Date(task.date).toLocaleString()}`;
+                    dateText.className = "text-sm text-gray-500 mt-1";
+                }
+
+                left.appendChild(taskText);
+                if (task.date) left.appendChild(dateText);
+
+                const buttons = document.createElement("div");
+                buttons.className = "flex gap-2 items-center";
+
+                const completeBtn = document.createElement("button");
+                completeBtn.textContent = task.completed ? "Undo" : "Done";
+                completeBtn.className = `text-green-600 font-semibold rounded px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-green-400 ${task.completed ? 'bg-green-100 hover:bg-green-200' : 'bg-green-100 hover:bg-green-200'}`;
+                completeBtn.onclick = () => {
+                    tasks[index].completed = !tasks[index].completed;
+                    renderTasks();
+                };
+
+                const editBtn = document.createElement("button");
+                editBtn.textContent = "✏️";
+                editBtn.className = "text-blue-600 rounded px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 bg-blue-100 hover:bg-blue-200";
+                editBtn.onclick = () => editTask(index);
+
+                const deleteBtn = document.createElement("button");
+                deleteBtn.textContent = "🗑️";
+                deleteBtn.className = "text-red-600 rounded px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-red-400 bg-red-100 hover:bg-red-200";
+                deleteBtn.onclick = () => {
+                    tasks.splice(index, 1);
+                    renderTasks();
+                };
+
+                buttons.appendChild(completeBtn);
+                buttons.appendChild(editBtn);
+                buttons.appendChild(deleteBtn);
+
+                li.appendChild(left);
+                li.appendChild(buttons);
+                taskList.appendChild(li);
+            });
+        }
+
+        function editTask(index) {
+            const newText = prompt("Edit your task:", tasks[index].text);
+            if (newText !== null && newText.trim() !== "") {
+                tasks[index].text = newText.trim();
+                renderTasks();
+            }
+        }
+
+        taskForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+            const newTask = {
+                text: taskInput.value.trim(),
+                date: taskDate.value,
+                completed: false
+            };
+            if (newTask.text) {
+                tasks.push(newTask);
+                taskInput.value = "";
+                taskDate.value = "";
+                renderTasks();
+            }
+        });
+
+        renderTasks();
+    </script>
+
+</body>
+</html>
